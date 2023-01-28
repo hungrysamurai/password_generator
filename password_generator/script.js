@@ -83,11 +83,7 @@ function updateSettings(newMode) {
 function updateLengthDOM(length) {
   lengthLabel.textContent = length;
   if (mode === "memorize") {
-    if (+length === 3 || +length === 4) {
-      lengthType.textContent = "блока";
-    } else {
-      lengthType.textContent = "блоков";
-    }
+    lengthType.textContent = "блоков";
   } else {
     lengthType.textContent = "символов";
   }
