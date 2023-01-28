@@ -29,7 +29,8 @@ body {
 /* Background area */
 
 .area {
-  background: var(--color-dark);
+  /* background: var(--color-dark); */
+  background: linear-gradient(var(--color-dark) 50%, var(--color-light));
   width: 100%;
   height: 100%;
   position: absolute;
@@ -101,6 +102,12 @@ h1 {
   height: 3.5rem;
   width: 100%;
   overflow: hidden;
+  white-space: nowrap;
+}
+
+.result-container.memorize-field {
+  white-space: normal;
+  height: 10rem;
 }
 
 .result-container span::selection {
@@ -189,6 +196,10 @@ h1 {
   font-size: 1.2rem;
 }
 
+.setting.hide {
+  display: none;
+}
+
 /* Password Lenght slider */
 
 .setting.length {
@@ -206,8 +217,8 @@ h1 {
 }
 
 .setting.length input[type="range"] {
-  margin: 1.2rem 0;
   -webkit-appearance: none;
+  margin: 1.2rem 0;
   background: transparent;
   width: 100%;
 }
@@ -319,6 +330,19 @@ h1 {
   margin: 0 1.5rem 2rem 1.5rem;
 }
 
+.checkboxes-container.random .setting.memorize {
+  display: none;
+}
+
+.checkboxes-container.memorize .setting.random {
+  display: none;
+}
+
+.checkboxes-container.pin .setting.random,
+.checkboxes-container.pin .setting.memorize {
+  display: none;
+}
+
 .setting-description {
   font-size: 1.5rem;
 }
@@ -363,15 +387,15 @@ h1 {
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background: var(--color5);
 }
 
-input:checked + .slider::before {
+input:checked+.slider::before {
   background: var(--color-light);
 }
 
-input:checked + .slider::before {
+input:checked+.slider::before {
   transform: translateX(1.25rem) scale(1.2);
 }
 
@@ -428,6 +452,34 @@ input:checked + .slider::before {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+.note-container {
+  position: fixed;
+  bottom: 2rem;
+  width: 500px;
+  max-width: 95%;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.note-container.info {
+  border: 3px solid var(--color4)
+}
+
+.note-container.error {
+  border: 3px solid var(--color3);
+}
+
+.note-container.hide {
+  opacity: 0;
+}
+
 @keyframes animate {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -461,6 +513,11 @@ input:checked + .slider::before {
     font-weight: 700;
     padding: 0.5rem 0.5rem;
     height: 2.5rem;
+  }
+
+  .result-container.memorize-field {
+    font-size: 10px;
+    height: 5rem;
   }
 
   .presets-area {
@@ -498,7 +555,18 @@ input:checked + .slider::before {
     justify-content: flex-start;
   }
 
+  h1 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
   .area {
     height: 130%;
+  }
+
+  .note-container {
+    font-size: 10px;
+    z-index: 10;
   }
 }
