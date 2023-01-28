@@ -58,7 +58,60 @@ copyBtn.addEventListener("click", () => {
   }
 });
 
-// Functions
+// DOM functions
+function updateSettings(newMode) {
+  mode = newMode;
+
+  checkboxesContainer.className = `checkboxes-container ${mode}`;
+
+  // Turn on all options by default
+  checkboxesContainer.querySelectorAll("input").forEach((checkbox) => {
+    checkbox.checked = true;
+  });
+
+  // Set length of length slider accorfing to mode
+  lengthSlider.min = mode === "random" ? 8 : mode === "pin" ? 4 : 5;
+  lengthSlider.max = mode === "random" ? 40 : mode === "pin" ? 12 : 16;
+
+  if (mode === "memorize") resultContainer.classList.add("memorize-field");
+  else resultContainer.classList.remove("memorize-field");
+  // Set default length
+  let length = mode === "random" ? 12 : mode === "pin" ? 8 : 5;
+  updateLengthDOM(length);
+}
+
+function updateLengthDOM(length) {
+  lengthLabel.textContent = length;
+  if (mode === "memorize") {
+    if (+length === 3 || +length === 4) {
+      lengthType.textContent = "блока";
+    } else {
+      lengthType.textContent = "блоков";
+    }
+  } else {
+    lengthType.textContent = "символов";
+  }
+  lengthSlider.value = length;
+}
+
+function showNote(text, noteMode) {
+  if (noteMode === "info") {
+    noteContainer.classList.remove("error");
+    noteContainer.classList.add("info");
+  } else {
+    noteContainer.classList.remove("info");
+    noteContainer.classList.add("error");
+  }
+
+  noteContainer.classList.remove("hide");
+  noteText.textContent = text;
+
+  setTimeout(() => {
+    noteContainer.classList.add("hide");
+  }, 3000);
+}
+
+// Generate random password/ generate PIN
 function generateRandom() {
   const passwordLength = +lengthSlider.value;
   let result = "";
@@ -100,6 +153,7 @@ function generateRandom() {
   resultEl.textContent = result;
 }
 
+// Generate random words
 function generateWords() {
   const passwordLength = +lengthSlider.value;
   let result = [];
@@ -132,52 +186,19 @@ function generateWords() {
   resultEl.textContent = result.join("-");
 }
 
-function updateSettings(newMode) {
-  mode = newMode;
-
-  checkboxesContainer.className = `checkboxes-container ${mode}`;
-
-  // Turn on all options by default
-  checkboxesContainer.querySelectorAll("input").forEach((checkbox) => {
-    checkbox.checked = true;
-  });
-
-  // Set length of length slider accorfing to mode
-  lengthSlider.min = mode === "random" ? 8 : mode === "pin" ? 4 : 5;
-  lengthSlider.max = mode === "random" ? 40 : mode === "pin" ? 12 : 16;
-
-  if (mode === "memorize") resultContainer.classList.add("memorize-field");
-  else resultContainer.classList.remove("memorize-field");
-  // Set default length
-  let length = mode === "random" ? 12 : mode === "pin" ? 8 : 5;
-  updateLengthDOM(length);
-}
-
-function updateLengthDOM(length) {
-  lengthLabel.textContent = length;
-  if (mode === "memorize") {
-    if (+length === 3 || +length === 4) {
-      lengthType.textContent = "блока";
-    } else {
-      lengthType.textContent = "блоков";
-    }
-  } else {
-    lengthType.textContent = "символов";
-  }
-  lengthSlider.value = length;
-}
-
-function getRandomWord() {
-  const word = words[getRandomValue(words.length)];
-  return word;
-}
-
+// Generate random value between 0 and max via crypto API
 function getRandomValue(max) {
   return Math.floor(
     (window.crypto.getRandomValues(new Uint32Array(1))[0] /
       (Math.pow(2, 32) - 1)) *
       max
   );
+}
+
+// Generation functions
+function getRandomWord() {
+  const word = words[getRandomValue(words.length)];
+  return word;
 }
 
 function getRandomLower() {
@@ -197,14 +218,15 @@ function getRandomSymbol() {
   return symbols[getRandomValue(symbols.length)];
 }
 
-const randomFunctionsArray = [
-  getRandomLower,
-  getRandomUpper,
-  getRandomNumber,
-  getRandomSymbol,
-];
-
+// Background
 function createDigitEl() {
+  const randomFunctionsArray = [
+    getRandomLower,
+    getRandomUpper,
+    getRandomNumber,
+    getRandomSymbol,
+  ];
+
   const el = document.createElement("li");
 
   // Set styles of digit
@@ -218,23 +240,6 @@ function createDigitEl() {
   el.style.filter = `blur(${Math.floor(Math.random() * 4)}px)`;
 
   return el;
-}
-
-function showNote(text, noteMode) {
-  if (noteMode === "info") {
-    noteContainer.classList.remove("error");
-    noteContainer.classList.add("info");
-  } else {
-    noteContainer.classList.remove("info");
-    noteContainer.classList.add("error");
-  }
-
-  noteContainer.classList.remove("hide");
-  noteText.textContent = text;
-
-  setTimeout(() => {
-    noteContainer.classList.add("hide");
-  }, 3000);
 }
 
 // Init BG
