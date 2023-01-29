@@ -102,9 +102,10 @@ h1 {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
+  transition: all 0.25s ease;
 }
 
-.result-container.memorize-field {
+.memorize-field {
   white-space: normal;
   height: 10rem;
 }
