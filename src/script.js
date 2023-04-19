@@ -1,4 +1,4 @@
-import { words } from "./words.js";
+import { words } from "./words";
 
 // DOM elements
 const bgContainer = document.querySelector(".digits");
@@ -25,43 +25,25 @@ const wholeWordSetting = document.querySelector("#wholeWord");
 const noteContainer = document.querySelector(".note-container");
 const noteText = noteContainer.querySelector(".note-text");
 
-// Events listeners
-presetsSelect.addEventListener("change", (e) => {
-  updateSettings(e.target.value);
-  resultEl.textContent = "";
-});
+// Init default settings
 
-lengthSlider.addEventListener("input", (e) => {
-  updateLengthDOM(e.target.value);
-});
+/**
+ * Mode of generato, by default - random
+ * @type {string}
+ */
+let mode = "random";
 
-generateBtn.addEventListener("click", () => {
-  if (mode === "random" || mode === "pin") {
-    generateRandom();
-  } else {
-    generateWords();
-  }
-});
-
-refreshBtn.addEventListener("click", () => {
-  if (mode === "random" || mode === "pin") {
-    generateRandom();
-  } else {
-    generateWords();
-  }
-});
-
-copyBtn.addEventListener("click", () => {
-  if (resultEl.textContent) {
-    navigator.clipboard.writeText(resultEl.textContent);
-    showNote("Пароль скопирован в буфер обмена", "info");
-  }
-});
+updateSettings(mode);
 
 // DOM functions
+
+/**
+ * @property {Function} updateSettings- update DOM according to mode
+ * @param {string} newMode 
+ * @returns {void}
+ */
 function updateSettings(newMode) {
   mode = newMode;
-
   checkboxesContainer.className = `checkboxes-container ${mode}`;
 
   // Turn on all options by default
@@ -80,6 +62,11 @@ function updateSettings(newMode) {
   updateLengthDOM(length);
 }
 
+/**
+ * @property {Function} updateLengthDOM - update DOM elements related to length of password
+ * @param {number} length - length DOM elements related to password length 
+ * @returns {void}
+ */
 function updateLengthDOM(length) {
   lengthLabel.textContent = length;
   if (mode === "memorize") {
@@ -90,6 +77,12 @@ function updateLengthDOM(length) {
   lengthSlider.value = length;
 }
 
+/**
+ * @property {Function} showNote - show notification
+ * @param {string} text 
+ * @param {string} noteMode 
+ * @returns {void}
+ */
 function showNote(text, noteMode) {
   if (noteMode === "info") {
     noteContainer.classList.remove("error");
@@ -107,7 +100,11 @@ function showNote(text, noteMode) {
   }, 3000);
 }
 
-// Generate random password/ generate PIN
+
+/**
+ * @property {Function} generateRandom - Generate random password/ generate PIN
+ * @returns {void}
+ */
 function generateRandom() {
   const passwordLength = +lengthSlider.value;
   let result = "";
@@ -149,9 +146,13 @@ function generateRandom() {
   resultEl.textContent = result;
 }
 
-// Generate random words
+/**
+ * @property {Function} generateWords - Generate random words
+ * @returns {void}
+ */
 function generateWords() {
   const passwordLength = +lengthSlider.value;
+
   let result = [];
   let spliceStarts = [0, 1];
   let spliceCounts = [4, 5];
@@ -182,39 +183,70 @@ function generateWords() {
   resultEl.textContent = result.join("-");
 }
 
-// Generate random value between 0 and max via crypto API
+
+/**
+ * @property {Function} getRandomValue - Generate random value between 0 and max via crypto API
+ * @returns {number}
+ */
 function getRandomValue(max) {
   return Math.floor(
     (window.crypto.getRandomValues(new Uint32Array(1))[0] /
       (Math.pow(2, 32) - 1)) *
-      max
+    max
   );
 }
 
 // Generation functions
+
+/**
+ * @property {Function} getRandomWord - get random word from words array
+ * @returns {string}
+ */
 function getRandomWord() {
   const word = words[getRandomValue(words.length)];
   return word;
 }
 
+/**
+ * @property {Function} getRandomLower - get random lowercase letter
+ * @returns {string}
+ */
 function getRandomLower() {
   return String.fromCharCode(getRandomValue(26) + 97);
 }
 
+/**
+ * @property {Function} getRandomUpper - get random uppercase letter
+ * @returns {string}
+ */
 function getRandomUpper() {
   return String.fromCharCode(getRandomValue(26) + 65);
 }
 
+/**
+ * @property {Function} getRandomNumber - get random number
+ * @returns {string}
+ */
 function getRandomNumber() {
   return String.fromCharCode(getRandomValue(10) + 48);
 }
 
+/**
+ * @property {Function} getRandomSymbol - get random symbol
+ * @returns {string}
+ */
 function getRandomSymbol() {
   const symbols = "!@#$^&*(){}[]=<>/,.";
   return symbols[getRandomValue(symbols.length)];
 }
 
 // Background
+
+/**
+ * 
+ * @property {Function} createDigitEl - creates <li></li> element with random character for background
+ * @returns {HTMLElement} - list item element with random character
+ */
 function createDigitEl() {
   const randomFunctionsArray = [
     getRandomLower,
@@ -250,6 +282,36 @@ window.setInterval(() => {
   }, 15000);
 }, 200);
 
-// Init default settings
-let mode = "random";
-updateSettings(mode);
+
+// Events listeners
+presetsSelect.addEventListener("change", (e) => {
+  updateSettings(e.target.value);
+  resultEl.textContent = "";
+});
+
+lengthSlider.addEventListener("input", (e) => {
+  updateLengthDOM(e.target.value);
+});
+
+generateBtn.addEventListener("click", () => {
+  if (mode === "random" || mode === "pin") {
+    generateRandom();
+  } else {
+    generateWords();
+  }
+});
+
+refreshBtn.addEventListener("click", () => {
+  if (mode === "random" || mode === "pin") {
+    generateRandom();
+  } else {
+    generateWords();
+  }
+});
+
+copyBtn.addEventListener("click", () => {
+  if (resultEl.textContent) {
+    navigator.clipboard.writeText(resultEl.textContent);
+    showNote("Пароль скопирован в буфер обмена", "info");
+  }
+});
