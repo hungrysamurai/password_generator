@@ -10,7 +10,7 @@
       href="./node_modules/@fortawesome/fontawesome-free/css/all.css"
     />
 
-    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/style/style.css" />
     <title>Генератор надёжных паролей</title>
   </head>
 
@@ -38,9 +38,9 @@
       <div class="presets-area">
         <div class="select-wrapper">
           <select name="presets" id="presets-select" class="presets-select">
-            <option value="random" class="select-item">Случайный</option>
-            <option value="memorize" class="select-item">Запоминающийся</option>
-            <option value="pin" class="select-item">PIN-код</option>
+            <option value="RANDOM" class="select-item">Случайный</option>
+            <option value="MEMORIZE" class="select-item">Запоминающийся</option>
+            <option value="PIN" class="select-item">PIN-код</option>
           </select>
         </div>
       </div>
@@ -125,6 +125,6 @@
     <div class="note-container info hide">
       <p class="note-text"></p>
     </div>
-    <script type="module" src="./src/script.js"></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
